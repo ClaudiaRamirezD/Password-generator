@@ -11,13 +11,63 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     const generateBtn = document.querySelector(".button-container");
 
+    const copyIcon = document.querySelector(".copy-image");
+    const copyTarget = document.querySelector(".password");
+    const copyStatus = document.getElementById("copy-status");
+
+    copyIcon.addEventListener("click", function () {
+        // Get the password text from the <p> element
+        const passwordText = copyTarget.textContent; // copyTarget is your ".password" p element
+
+        // Put the password into the hidden input field
+        const hiddenInput = document.getElementById("hidden-copy-input");
+        hiddenInput.value = passwordText;
+
+        // Select the hidden inputs value
+        hiddenInput.select();
+        hiddenInput.setSelectionRange(0, 99999);
+
+        // Copy the text to the clipboard using Clipboard API
+        navigator.clipboard
+            .writeText(passwordText)
+            .then(function () {
+              // Success feedback
+                console.log("Copied successfully!");
+
+                // Show the "Copied!" message
+                copyStatus.style.display = "block"; // Show the message
+                copyIcon.style.display = "none"; // Hide the SVG
+
+                setTimeout(() => {
+                  copyStatus.style.display = "none"; // Hide the message after 2 seconds
+                  copyIcon.style.display = "block"; // Restore the SVG
+                }, 2000);
+            })
+            .catch(function (error) {
+            // Error feedback
+            console.error("Copy failed:", error);
+            });
+    });
+
+    lengthRange.addEventListener("mousedown", function () {
+      lengthRange.classList.add("active"); // Active class when mouse is down
+    });
+
+    lengthRange.addEventListener("mouseup", function () {
+      lengthRange.classList.remove("active"); // Remove hover class
+    });
+
+    lengthRange.addEventListener("mouseleave", function () {
+      lengthRange.classList.remove("active"); // Remove active class if mouse leaves the slider
+    });
+
     lengthRange.value = 10; // Set the desired starting value here
     characterNumber.textContent = lengthRange.value;
 
     // Update the background of the range input based on the initial value
     const val =
         ((lengthRange.value - lengthRange.min) /
-            (lengthRange.max - lengthRange.min)) *
+        (lengthRange.max - lengthRange.min)) *
         100;
     lengthRange.style.background = `linear-gradient(to right, rgb(164, 255, 175) ${val}%, rgb(24, 23, 31) ${val}%)`;
 
@@ -27,9 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Update the background of the range input
         const val =
-            ((lengthRange.value - lengthRange.min) /
-                (lengthRange.max - lengthRange.min)) *
-            100;
+        ((lengthRange.value - lengthRange.min) /
+            (lengthRange.max - lengthRange.min)) *
+        100;
         lengthRange.style.background = `linear-gradient(to right, rgb(164, 255, 175) ${val}%, rgb(24, 23, 31) ${val}%)`;
     });
 
@@ -43,11 +93,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Generate the password
         const password = generatePassword(
-            length,
-            includeUppercase,
-            includeLowercase,
-            includeNumbers,
-            includeSymbols
+        length,
+        includeUppercase,
+        includeLowercase,
+        includeNumbers,
+        includeSymbols
         );
 
         // Update the password display
@@ -70,8 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let password = "";
         for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * charset.length);
-            password += charset[randomIndex];
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        password += charset[randomIndex];
         }
         return password;
     }
@@ -95,41 +145,41 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateStrengthIndicator(strength) {
         // Update strength message based on calculated strength
         strengthOutputText.textContent = [
-            "TOO WEAK!", // 0
-            "TOO WEAK!", // 0
-            "WEAK!", // 1
-            "MEDIUM!", // 2
-            "STRONG!", // 3
-            "EXCELLENT!", // 4
+        "TOO WEAK!", // 0
+        "TOO WEAK!", // 0
+        "WEAK!", // 1
+        "MEDIUM!", // 2
+        "STRONG!", // 3
+        "EXCELLENT!", // 4
         ][strength];
 
         strengthOutputFields.forEach((field, index) => {
-            // Remove all previous strength classes
-            field.classList.remove(
-                "too-weak",
-                "weak",
-                "medium",
-                "strong",
-                "excellent"
-            );
+        // Remove all previous strength classes
+        field.classList.remove(
+            "too-weak",
+            "weak",
+            "medium",
+            "strong",
+            "excellent"
+        );
 
-            if (index < strength) {
-                field.classList.add("filled");
-                // Apply strength-specific class
-                if (strength === 1) {
-                    field.classList.add("too-weak");
-                } else if (strength === 2) {
-                    field.classList.add("weak");
-                } else if (strength === 3) {
-                    field.classList.add("medium");
-                } else if (strength === 4) {
-                    field.classList.add("strong");
-                } else if (strength === 5) {
-                    field.classList.add("excellent"); // Make sure this condition is correct
-                } else {
-                    field.classList.remove("filled");
-                }
-            };
+        if (index < strength) {
+            field.classList.add("filled");
+            // Apply strength-specific class
+            if (strength === 1) {
+            field.classList.add("too-weak");
+            } else if (strength === 2) {
+            field.classList.add("weak");
+            } else if (strength === 3) {
+            field.classList.add("medium");
+            } else if (strength === 4) {
+            field.classList.add("strong");
+            } else if (strength === 5) {
+            field.classList.add("excellent"); // Make sure this condition is correct
+            } else {
+            field.classList.remove("filled");
+            }
+        }
         });
     }
-})
+});
