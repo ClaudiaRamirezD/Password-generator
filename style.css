@@ -50,6 +50,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    width: clamp(35rem, 50vw, 60rem);
 }
 
 .password-generated, .choices-container {
@@ -298,13 +299,4 @@ button {
 
 .button-container:hover svg path {
     fill: var(--clr-accent); /* Change SVG fill color on hover */
-}
-
-
-@media (min-width: 50rem) {
-
-    .card {
-        max-width: 50rem;
-    }
-
 }
